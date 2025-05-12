@@ -1,19 +1,22 @@
+from dotenv import load_dotenv
 import os
 
-# Configuration for the bot
+# Load environment variables from .env file
+load_dotenv()
+
 class Config:
     # Instagram API credentials
-    INSTAGRAM_USERNAME = os.getenv("INSTAGRAM_USERNAME", "your_username")
-    INSTAGRAM_PASSWORD = os.getenv("INSTAGRAM_PASSWORD", "your_password")
+    INSTAGRAM_USERNAME = os.getenv("INSTAGRAM_USERNAME")
+    INSTAGRAM_PASSWORD = os.getenv("INSTAGRAM_PASSWORD")
     
     # Encryption settings
-    ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY", "your_encryption_key_here")
+    ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")
     
-    # Group permissions (add group IDs here)
-    ALLOWED_GROUPS = ["group_id_1", "group_id_2"]
-
+    # Group permissions (comma-separated group IDs)
+    ALLOWED_GROUPS = os.getenv("ALLOWED_GROUPS", "").split(",")
+    
     # Admin contact
-    ADMIN_CONTACT = "@xploit.ninja"
+    ADMIN_CONTACT = os.getenv("ADMIN_CONTACT", "@xploit.ninja")
 
     # Message update interval (in seconds)
-    MESSAGE_UPDATE_INTERVAL = 3600  # 1 hour
+    MESSAGE_UPDATE_INTERVAL = int(os.getenv("MESSAGE_UPDATE_INTERVAL", "3600"))
