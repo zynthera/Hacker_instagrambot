@@ -1,10 +1,19 @@
 from cryptography.fernet import Fernet
 from config import Config
 import random
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logger = logging.getLogger(__name__)
 
 class MessageHandler:
     def __init__(self):
-        self.cipher = Fernet(Config.ENCRYPTION_KEY.encode())
+        try:
+            self.cipher = Fernet(Config.ENCRYPTION_KEY.encode())
+        except Exception as e:
+            logger.error("Failed to initialize encryption: %s", e)
+            raise
         self.previous_messages = set()
 
     def generate_message(self):
@@ -21,13 +30,20 @@ class MessageHandler:
         return f"{new_message}\nAdmin - {Config.ADMIN_CONTACT}"
 
     def encrypt_message(self, message):
-        return self.cipher.encrypt(message.encode()).decode()
+        try:
+            return self.cipher.encrypt(message.encode()).decode()
+        except Exception as e:
+            logger.error("Encryption failed: %s", e)
+            raise
 
     def send_message(self, group_id, api_client):
         if group_id not in Config.ALLOWED_GROUPS:
-            print(f"Group {group_id} is not permitted to receive messages.")
+            logger.warning("Group %s is not permitted to receive messages.", group_id)
             return
-        message = self.generate_message()
-        encrypted_message = self.encrypt_message(message)
-        api_client.send_group_message(group_id, encrypted_message)
-        print(f"Message sent to group {group_id}: {encrypted_message}")
+        try:
+            message = self.generate_message()
+            encrypted_message = self.encrypt_message(message)
+            api_client.send_group_message(group_id, encrypted_message)
+            logger.info("Message sent to group %s: %s", group_id, encrypted_message)
+        except Exception as e:
+            logger.error("Failed to send message to group %s: %s", group_id, e)
