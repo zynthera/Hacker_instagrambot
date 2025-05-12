@@ -13,7 +13,7 @@ Welcome to the Instagram Group Bot! This bot is designed for secure and dynamic 
 1. Clone the repository:
    ```bash
    git clone https://github.com/zynthera/Hacker_instagrambot.git
-   cd instagram-bot
+   cd Hacker_instagrambot
    ```
 
 2. Install dependencies:
