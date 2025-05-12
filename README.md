@@ -34,4 +34,3 @@ Welcome to the Instagram Group Bot! This bot is designed for secure and dynamic 
 ## 🛠️ Configuration
 Update `config.py` to add your group IDs and other settings.
 
-## Join
