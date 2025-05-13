@@ -107,6 +107,9 @@ Yes! Follow these steps to install the required dependencies on Termux:
 pkg update
 pkg upgrade
 pkg install python rust cargo
+```
+
+```bash
 pkg install clang python-dev libffi libffi-dev openssl openssl-dev
 pip install cryptography
 ```
