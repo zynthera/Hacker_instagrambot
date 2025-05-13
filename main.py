@@ -14,6 +14,9 @@ class MockAPIClient:
         logger.info("Mock: Sent message to group %s: %s", group_id, message)
 
 def main():
+    # Validate configuration
+    Config.validate()
+    
     api_client = MockAPIClient()
     message_handler = MessageHandler()
     task_manager = TaskManager()
@@ -21,10 +24,14 @@ def main():
     # Example use case
     logger.info("Bot is starting...")
     try:
+        iterations = 0  # Add a counter for testing
         while True:
             for group_id in Config.ALLOWED_GROUPS:
                 message_handler.send_message(group_id, api_client)
             sleep(Config.MESSAGE_UPDATE_INTERVAL)
+            iterations += 1
+            if iterations >= 10:  # Stop after 10 iterations during testing
+                break
     except KeyboardInterrupt:
         logger.info("Bot stopped by user.")
     except Exception as e:
