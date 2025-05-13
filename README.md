@@ -1,6 +1,6 @@
 # 🎉 Hacker_InstaGroupBot 🤖
 <p align="center">
-  <img src="https://raw.githubusercontent.com/zynthera/Hacker_instagrambot/main/assets/banner.png" alt="Hacker_InstaGroupBot Banner">
+  <img src="https://github.com/zynthera/zynthera/raw/master/public/hh.png"</img>
 </p>
 
 <p align="center">
