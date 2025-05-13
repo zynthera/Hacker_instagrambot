@@ -1,6 +1,6 @@
 # 🎉 Hacker_InstaGroupBot 🤖
 <p align="center">
-  <img src="https://via.placeholder.com/800x200.png?text=Hacker_InstaGroupBot+-+Secure+Your+Groups" alt="Hacker_InstaGroupBot Banner">
+  <img src="https://raw.githubusercontent.com/zynthera/Hacker_instagrambot/main/assets/banner.png" alt="Hacker_InstaGroupBot Banner">
 </p>
 
 <p align="center">
@@ -24,8 +24,8 @@
 ### 1️⃣ Clone the Repository
 Clone the repository to your local machine:
 ```bash
-git clone https://github.com/your-repo/instagram-bot.git
-cd instagram-bot
+git clone https://github.com/zynthera/Hacker_instagrambot.git
+cd Hacker_instagrambot
 ```
 
 ### 2️⃣ Install Dependencies
