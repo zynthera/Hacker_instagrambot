@@ -18,8 +18,15 @@ Welcome to the Instagram Group Bot! This bot is designed for secure and dynamic 
    ```
 
 2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
+  • On non root user on Termux
+```bash
+   apt-get install build-essential libssl-dev libffi-dev python3-dev
+pip install cryptography
+   ```
+  • On root user 
+```bash
+   sudo apt-get install build-essential libssl-dev libffi-dev python3-dev
+pip install cryptography
    ```
 
 3. Set up environment variables in a `.env` file:
