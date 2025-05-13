@@ -1,60 +1,156 @@
-# Instagram Group Bot 🤖
+# 🎉 Hacker_InstaGroupBot 🤖
+<p align="center">
+  <img src="https://via.placeholder.com/800x200.png?text=Hacker_InstaGroupBot+-+Secure+Your+Groups" alt="Hacker_InstaGroupBot Banner">
+</p>
 
-Welcome to the Instagram Group Bot! This bot is designed for secure and dynamic group-based messaging with task management features.
+<p align="center">
+  <strong>Admin:</strong> <a href="https://instagram.com/xploit.ninja">@xploit.ninja</a>
+</p>
+
+---
 
 ## 🌟 Features
-- **End-to-End Encrypted Messaging** 🔒 using the latest encryption standards.
-- **Dynamic Messages**: Messages update automatically to avoid repetition.
-- **Group Permissions**: Messages are only sent to allowed groups.
-- **Task Assignment**: Assign tasks to specific users within a group.
-- **Admin Contact**: Easily contact the admin - [@xploit.ninja](https://instagram.com/xploit.ninja).
-- **Auto-generated Encryption Key**: If no encryption key is provided via environment variables, the bot will automatically generate one and store it securely.
+- **🔒 End-to-End Encrypted Messaging**: Messages are secured using the latest encryption standards.
+- **🔄 Dynamic Messages**: Automatically updates messages to keep content fresh.
+- **👥 Group Permissions**: Messages are sent only to authorized groups.
+- **✅ Task Assignment**: Assign and manage tasks for specific users within groups.
+- **📡 Auto-Generated Encryption Key**: Automatically generates a secure encryption key if not provided.
+- **📞 Admin Contact**: Direct admin support for any inquiries or issues.
 
-## 🚀 Installation
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/zynthera/Hacker_instagrambot.git
-   cd Hacker_instagrambot
-   ```
+---
 
-2. Install dependencies:
-  • On non root user on Termux
+## 🚀 Quick Start Guide
+
+### 1️⃣ Clone the Repository
+Clone the repository to your local machine:
 ```bash
-   apt-get install build-essential libssl-dev libffi-dev python3-dev
-pip install cryptography
-   ```
-  • On root user 
+git clone https://github.com/your-repo/instagram-bot.git
+cd instagram-bot
+```
+
+### 2️⃣ Install Dependencies
+Install the required Python dependencies using `requirements.txt`:
 ```bash
-   sudo apt-get install build-essential libssl-dev libffi-dev python3-dev
-pip install cryptography
+pip install -r requirements.txt
+```
+
+### 3️⃣ Set Up Environment Variables
+Create a `.env` file in the project directory and populate it with the following variables:
+```env
+INSTAGRAM_USERNAME=your_instagram_username
+INSTAGRAM_PASSWORD=your_instagram_password
+# Optional: Provide your encryption key, or the bot will generate one automatically.
+ENCRYPTION_KEY=your_generated_encryption_key
+ALLOWED_GROUPS=group_id_1,group_id_2
+ADMIN_CONTACT=@xploit.ninja
+MESSAGE_UPDATE_INTERVAL=3600
+```
+
+### 4️⃣ Generate an Encryption Key (Optional)
+If you don’t want the bot to auto-generate an encryption key, you can generate one manually:
+
+#### **Using Python Script**
+1. Create the following script in a file named `generate_encryption_key.py`:
+   ```python
+   from cryptography.fernet import Fernet
+
+   def generate_key(file_name="encryption.key"):
+       """
+       Generate a secure encryption key and save it to a file.
+       """
+       key = Fernet.generate_key()
+       with open(file_name, "wb") as key_file:
+           key_file.write(key)
+       print(f"Encryption key successfully generated and saved to '{file_name}'.")
+
+   if __name__ == "__main__":
+       generate_key()
    ```
 
-3. Set up environment variables in a `.env` file:
-   ```env
-   INSTAGRAM_USERNAME=your_instagram_username
-   INSTAGRAM_PASSWORD=your_instagram_password
-   # Optional: provide your encryption key, otherwise one will be auto-generated.
-   ENCRYPTION_KEY=your_generated_encryption_key
-   ALLOWED_GROUPS=group_id_1,group_id_2
-   ADMIN_CONTACT=@xploit.ninja
-   MESSAGE_UPDATE_INTERVAL=3600
-   ```
-
-4. Run the bot:
+2. Run the script:
    ```bash
-   python main.py
+   python generate_encryption_key.py
    ```
 
-## 🛠️ Configuration
-- Updating the `.env` file allows you to configure group IDs, API credentials, and other settings.
-- The encryption key will be auto-generated and saved to `encryption.key` if not provided.
+3. A file named `encryption.key` will be created in your directory. Open the file, copy the key, and paste it into your `.env` file under `ENCRYPTION_KEY`.
 
-## 🧪 Testing
-- Add unit tests for each feature to ensure reliability.
-- Run tests using `unittest`:
+### 5️⃣ Run the Bot
+Start the bot with:
+```bash
+python main.py
+```
+
+---
+
+## 🛠️ Configuration Options
+The bot can be customized using the `.env` file:
+- **`INSTAGRAM_USERNAME`**: Your Instagram username.
+- **`INSTAGRAM_PASSWORD`**: Your Instagram password.
+- **`ENCRYPTION_KEY`**: A secure encryption key (generated automatically if not provided).
+- **`ALLOWED_GROUPS`**: Comma-separated list of group IDs authorized to receive messages.
+- **`ADMIN_CONTACT`**: Contact information for the bot admin (e.g., Instagram handle).
+- **`MESSAGE_UPDATE_INTERVAL`**: Time interval (in seconds) for updating messages.
+
+---
+
+## 🧪 FAQ
+
+### **1. What happens if I don’t provide an encryption key?**
+The bot will automatically generate a secure encryption key and save it in a file named `encryption.key`.
+
+### **2. How do I find group IDs for `ALLOWED_GROUPS`?**
+You can refer to Instagram's API documentation or use third-party tools to fetch group IDs.
+
+### **3. Can this bot run on Termux?**
+Yes! Follow these steps to install the required dependencies on Termux:
+```bash
+pkg update
+pkg upgrade
+pkg install python
+pkg install clang python-dev libffi libffi-dev openssl openssl-dev
+pip install cryptography
+```
+
+### **4. How do I troubleshoot encryption errors?**
+Ensure the `cryptography` library is installed:
+```bash
+pip install cryptography
+```
+If the issue persists, regenerate the encryption key using the script provided above.
+
+---
+
+## 💡 Best Practices
+- **Secure Your `.env` File**: Avoid sharing your `.env` file or storing it in public repositories.
+- **Use Strong Passwords**: Set a strong password for your Instagram account.
+- **Keep Dependencies Updated**: Regularly update your dependencies with:
   ```bash
-  python -m unittest discover
+  pip install --upgrade -r requirements.txt
   ```
+
+---
+
+## 🤝 Contribution Guidelines
+We welcome contributions from the community! To contribute:
+
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix:
+   ```bash
+   git checkout -b feature-name
+   ```
+3. Commit your changes:
+   ```bash
+   git commit -m "Add feature-name"
+   ```
+4. Push to your branch:
+   ```bash
+   git push origin feature-name
+   ```
+5. Create a pull request on GitHub.
+
+For major changes, please open an issue first to discuss your approach.
+
+---
 
 ## 📜 License
 This project is licensed under the **MIT License**.
@@ -66,8 +162,7 @@ Copyright (c) 2025 zynthera
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
 
@@ -83,4 +178,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-Let me know if you need help with anything else!
+---
+
+## 📞 Contact
+For any questions, feel free to reach out to the admin: [@xploit.ninja](https://instagram.com/xploit.ninja).
