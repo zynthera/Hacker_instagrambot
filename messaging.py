@@ -2,6 +2,7 @@ from cryptography.fernet import Fernet
 from config import Config
 import random
 import logging
+import time
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -12,7 +13,7 @@ class MessageHandler:
         try:
             self.cipher = Fernet(Config.ENCRYPTION_KEY.encode())
         except Exception as e:
-            logger.error("Failed to initialize encryption: %s", e)
+            logger.error("Failed to initialize encryption. Check your ENCRYPTION_KEY: %s", e)
             raise
         self.previous_messages = set()
 
@@ -30,11 +31,14 @@ class MessageHandler:
         return f"{new_message}\nAdmin - {Config.ADMIN_CONTACT}"
 
     def encrypt_message(self, message):
-        try:
-            return self.cipher.encrypt(message.encode()).decode()
-        except Exception as e:
-            logger.error("Encryption failed: %s", e)
-            raise
+        retries = 3
+        for attempt in range(retries):
+            try:
+                return self.cipher.encrypt(message.encode()).decode()
+            except Exception as e:
+                logger.error("Encryption failed (Attempt %d/%d): %s", attempt + 1, retries, e)
+                time.sleep(1)
+        raise Exception("Encryption failed after multiple attempts.")
 
     def send_message(self, group_id, api_client):
         if group_id not in Config.ALLOWED_GROUPS:
