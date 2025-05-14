@@ -1,28 +1,26 @@
+import requests
 import random
 
-# Predefined list of hacker-style messages
-messages = [
+# Predefined fallback messages
+fallback_messages = [
     "Access granted. Welcome to the dark side.",
     "System breach detected. Proceed with caution.",
     "Initiating override sequence... Stand by.",
-    "The shadows have eyes. Stay vigilant.",
-    "Decrypting secrets... Admin-@xploit.ninja.",
-    "Your presence has been logged. No turning back.",
-    "Welcome, operative. The game begins now.",
-    "Intrusion successful. Await further commands.",
-    "You are now part of the matrix. Admin-@xploit.ninja.",
-    "Shadow protocol activated. Stay in the group."
 ]
 
-def generate_group_message(username):
+def generate_group_message(username, gemini_api_key):
     """
-    Generates a hacker-style message for a group with the given username.
-    
-    Args:
-        username (str): The username of the person to address in the group message.
-    
-    Returns:
-        str: A formatted message with hacker style and admin signature.
+    Generates a personalized message for a user using Gemini AI.
+    If Gemini API fails, uses fallback messages.
     """
-    message = random.choice(messages)
-    return f"@{username}, {message} (For group use only)."
+    try:
+        response = requests.post(
+            "https://api.gemini.ai/v1/generate",
+            headers={"Authorization": f"Bearer {gemini_api_key}"},
+            json={"prompt": f"Generate a fun and engaging message for Instagram user @{username}."}
+        )
+        response.raise_for_status()
+        return response.json().get("message", random.choice(fallback_messages))
+    except Exception as e:
+        print(f"Error using Gemini API: {e}")
+        return random.choice(fallback_messages)
