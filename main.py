@@ -1,53 +1,56 @@
 import os
+import asyncio
 from dotenv import load_dotenv
 from message_generator import generate_group_message
 from instagram_api import InstagramAPI
-from logger import setup_logger
 from rate_limiter import RateLimiter
-import asyncio
+from logger import logger
 
-# Load environment variables
+# Load environment variables from .env
 load_dotenv()
 
 INSTAGRAM_USERNAME = os.getenv("INSTAGRAM_USERNAME")
 INSTAGRAM_PASSWORD = os.getenv("INSTAGRAM_PASSWORD")
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")  # For Gemini AI API
 
-# Initialize logger and rate limiter
-logger = setup_logger("HackerInstagramBot")
-rate_limiter = RateLimiter(rate=10, per=60)  # Limit to 10 requests per minute
+rate_limiter = RateLimiter(rate_limit=10, time_window=60)  # Max 10 messages per 60 seconds
 
 async def send_group_message(api, group_id, users):
     """
-    Sends personalized messages to all users in a specific group asynchronously.
+    Sends personalized messages to all users in a specific group.
+    Implements rate limiting to avoid being flagged by Instagram.
     """
     for user in users:
-        await rate_limiter.wait()  # Enforce rate limiting
-        message = generate_group_message(user, GEMINI_API_KEY)
-        success = await api.send_message(group_id=group_id, user_id=user, message=message)
-        if success:
-            logger.info(f"Message sent to @{user} in group {group_id}.")
+        if rate_limiter.is_allowed():
+            # Generate message using Gemini AI
+            message = generate_group_message(user, GEMINI_API_KEY)
+            success = await api.send_message(group_id=group_id, user_id=user, message=message)
+            if success:
+                logger.info(f"Message sent to @{user} in group {group_id}.")
+            else:
+                logger.error(f"Failed to send message to @{user} in group {group_id}.")
         else:
-            logger.error(f"Failed to send message to @{user}.")
+            logger.warning("Rate limit exceeded. Waiting...")
+            await asyncio.sleep(rate_limiter.time_to_reset())
 
 async def main():
     """
-    Main logic for logging in to Instagram and sending group messages.
+    Main function to log in to Instagram and send messages to groups.
     """
     api = InstagramAPI(username=INSTAGRAM_USERNAME, password=INSTAGRAM_PASSWORD)
-    if not await api.login():
-        logger.error("Failed to log in. Please check your credentials.")
+    logged_in = await api.login()
+    if not logged_in:
+        logger.error("Failed to log in to Instagram. Please check credentials.")
         return
 
     groups = await api.fetch_user_groups()
     if not groups:
-        logger.error("No groups found where the user is a member.")
+        logger.warning("No groups found where the user is a member.")
         return
 
-    logger.info(f"Logged in successfully as {INSTAGRAM_USERNAME}.")
     for group in groups:
-        group_id, group_users = group['id'], group['members']
-        logger.info(f"Sending messages to group {group_id}...")
+        group_id = group['id']
+        group_users = group['members']
         await send_group_message(api, group_id, group_users)
 
 if __name__ == "__main__":
