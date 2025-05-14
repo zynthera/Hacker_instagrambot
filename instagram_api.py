@@ -1,51 +1,29 @@
-import time
+import instaloader
+import asyncio
 
 class InstagramAPI:
-    """
-    A mock class simulating Instagram API interaction for login and messaging.
-    Replace this with an actual Instagram API implementation for production.
-    """
     def __init__(self, username, password):
         self.username = username
         self.password = password
-        self.authenticated = False
+        self.loader = instaloader.Instaloader()
 
-    def login(self):
-        """
-        Simulates logging in to Instagram.
-        """
-        print(f"Logging in as {self.username}...")
-        time.sleep(2)  # Simulate network delay
-        if self.username and self.password:
-            self.authenticated = True
-            print("Login successful!")
+    async def login(self):
+        try:
+            self.loader.login(self.username, self.password)
             return True
-        print("Login failed. Invalid credentials.")
-        return False
-
-    def fetch_user_groups(self):
-        """
-        Simulates fetching groups the user is a member of.
-        """
-        if not self.authenticated:
-            print("Not authenticated. Please log in first.")
-            return None
-
-        # Mock group data
-        mock_groups = [
-            {"id": "group1", "members": ["user1", "user2", "user3"]},
-            {"id": "group2", "members": ["user4", "user5", "user6"]}
-        ]
-        return mock_groups
-
-    def send_message(self, group_id, user_id, message):
-        """
-        Simulates sending a message to a user in a group.
-        """
-        if not self.authenticated:
-            print("Not authenticated. Please log in first.")
+        except Exception as e:
+            print(f"Login failed: {e}")
             return False
 
-        print(f"Sending message to @{user_id} in group {group_id}: {message}")
-        time.sleep(1)  # Simulate message sending delay
+    async def fetch_user_groups(self):
+        # Mock example: replace with actual implementation
+        return [
+            {"id": "group1", "members": ["user1", "user2"]},
+            {"id": "group2", "members": ["user3", "user4"]},
+        ]
+
+    async def send_message(self, group_id, user_id, message):
+        # Mock example: replace with actual implementation
+        await asyncio.sleep(1)  # Simulate API delay
+        print(f"Sent to {user_id} in {group_id}: {message}")
         return True
