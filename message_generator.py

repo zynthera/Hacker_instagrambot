@@ -1,0 +1,28 @@
+import random
+
+# Predefined list of hacker-style messages
+messages = [
+    "Access granted. Welcome to the dark side.",
+    "System breach detected. Proceed with caution.",
+    "Initiating override sequence... Stand by.",
+    "The shadows have eyes. Stay vigilant.",
+    "Decrypting secrets... Admin-@xploit.ninja.",
+    "Your presence has been logged. No turning back.",
+    "Welcome, operative. The game begins now.",
+    "Intrusion successful. Await further commands.",
+    "You are now part of the matrix. Admin-@xploit.ninja.",
+    "Shadow protocol activated. Stay in the group."
+]
+
+def generate_group_message(username):
+    """
+    Generates a hacker-style message for a group with the given username.
+    
+    Args:
+        username (str): The username of the person to address in the group message.
+    
+    Returns:
+        str: A formatted message with hacker style and admin signature.
+    """
+    message = random.choice(messages)
+    return f"@{username}, {message} (For group use only)."
